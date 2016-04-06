@@ -2,6 +2,8 @@ package main
 
 import (
 	"flag"
+	"strconv"
+
 	"net/http"
 	_ "net/http/pprof"
 	"sync"
@@ -83,7 +85,7 @@ func NewExporter(uri string) *Exporter {
 				Name:      "catalog_service_node_healthy",
 				Help:      "Is this service healthy on this node?",
 			},
-			[]string{"service", "node"},
+			[]string{"service", "node", "port"},
 		),
 
 		client: consul_client,
@@ -202,7 +204,7 @@ func (e *Exporter) setMetrics(services <-chan []*consul_api.ServiceEntry) {
 
 			log.Infof("%v/%v status is %v", entry.Service.Service, entry.Node.Node, passing)
 
-			e.serviceNodesHealthy.WithLabelValues(entry.Service.Service, entry.Node.Node+":"+entry.Port.Port).Set(float64(passing))
+			e.serviceNodesHealthy.WithLabelValues(entry.Service.Service, entry.Node.Node, strconv.Itoa(entry.Service.Port)).Set(float64(passing))
 		}
 	}
 }
