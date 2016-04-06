@@ -1,5 +1,5 @@
-FROM       golang:1.4.2-onbuild
-MAINTAINER Prometheus Team <prometheus-developers@googlegroups.com>
+FROM golang:1.4.2-onbuild
+LABEL container.name="wehkamp/prometheus-consul-exporter:1.0.0"
 
 ENTRYPOINT [ "go-wrapper", "run" ]
-EXPOSE     9107
+EXPOSE 9107
